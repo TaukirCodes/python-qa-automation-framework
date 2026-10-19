@@ -1,0 +1,24 @@
+
+# Python cache
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Virtual environment
+.venv/
+venv/
+
+# Test output
+reports/
+screenshots/
+logs/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# IDE and OS
+.vscode/
+.DS_Store
+Thumbs.db

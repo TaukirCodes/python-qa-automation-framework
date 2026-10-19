@@ -1,0 +1,5 @@
+﻿test_id,username,password,expected_error
+TC_01,wronguser,Password123,Your username is invalid!
+TC_02,student,wrongpass,Your password is invalid!
+TC_03,wronguser,wrongpass,Your username is invalid!
+TC_04,student,invalid123,Your password is invalid!
