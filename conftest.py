@@ -8,17 +8,32 @@ from selenium import webdriver
 SCREENSHOT_DIR = Path("screenshots")
 
 
+import os
+import pytest
+
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+
+
 @pytest.fixture
 def driver(request):
-    browser = webdriver.Chrome()
-    browser.maximize_window()
+    options = Options()
 
-    # Store browser for the reporting hook
+    # Enable headless mode in GitHub Actions
+    if os.getenv("CI") == "true":
+        options.add_argument("--headless=new")
+
+    options.add_argument("--window-size=1920,1080")
+    options.add_argument("--disable-dev-shm-usage")
+
+    browser = webdriver.Chrome(options=options)
+
     request.node.driver = browser
 
     yield browser
 
     browser.quit()
+
 
 
 @pytest.hookimpl(hookwrapper=True)

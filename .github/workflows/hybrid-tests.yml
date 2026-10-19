@@ -1,0 +1,55 @@
+
+name: Hybrid QA Automation Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  hybrid-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Verify Chrome
+        run: |
+          google-chrome --version
+
+      - name: Create output directories
+        run: |
+          mkdir -p reports screenshots logs
+
+      - name: Run UI and API tests
+        env:
+          CI: "true"
+        run: |
+          python -m pytest -v tests \
+            --html=reports/hybrid_report.html \
+            --self-contained-html
+
+      - name: Upload test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hybrid-test-evidence
+          path: |
+            reports/
+            screenshots/
+            logs/
+          if-no-files-found: warn
